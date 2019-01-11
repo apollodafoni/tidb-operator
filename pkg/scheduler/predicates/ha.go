@@ -89,16 +89,18 @@ func (h *ha) Filter(instanceName string, pod *apiv1.Pod, nodes []apiv1.Node) ([]
 	for _, node := range nodes {
 		nodeMap[node.GetName()] = make([]string, 0)
 	}
-	glog.Infof("%+v", podList)
+	arr := make([]string, 0)
 	for _, pod := range podList.Items {
 		pName := pod.GetName()
 		nodeName := pod.Spec.NodeName
+		arr = append(arr, nodeName)
 		if nodeName == "" || nodeMap[nodeName] == nil {
 			continue
 		}
 
 		nodeMap[nodeName] = append(nodeMap[nodeName], pName)
 	}
+	glog.Infof("%v", arr)
 	glog.V(2).Infof("nodeMap: %+v", nodeMap)
 
 	min := -1
